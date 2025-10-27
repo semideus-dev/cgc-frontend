@@ -20,7 +20,7 @@ export default function UserButton() {
       </Button>
     </Link>
   ) : (
-    <Link href="/dashboard" className="p-0 m-0">
+    <Link href="/profile" className="p-0 m-0">
       <Avatar>
         <AvatarFallback className="bg-black text-primary">
           {session.user.name

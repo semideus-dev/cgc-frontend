@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useAuthProtection } from "@/hooks/use-auth-protection";
+import { authClient } from "@/lib/auth-client";
 import {
   Upload,
   Eye,
@@ -23,53 +23,11 @@ import {
 } from "lucide-react";
 
 export default function LandingPage() {
-  const { session, isLoading } = useAuthProtection({
-    requireAuth: false, // This is a public landing page
-    redirectTo: "/dashboard" // Redirect authenticated users to dashboard
-  });
-
-  // Show loading state while checking authentication
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // If user is authenticated, the hook will handle redirect
-  if (session?.user) {
-    return null;
-  }
+  const { data: session } = authClient.useSession();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-      {/* Navigation */}
-      <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-14 sm:h-16">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <h1 className="text-lg sm:text-2xl font-bold text-primary">AdVision</h1>
-              </div>
-            </div>
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <div className="flex gap-2 sm:gap-3">
-                <Button asChild variant="outline" size="sm" className="text-xs sm:text-sm">
-                  <a href="/sign-in">Sign In</a>
-                </Button>
-                <Button asChild size="sm" className="text-xs sm:text-sm">
-                  <a href="/sign-up">Get Started</a>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+      
       {/* 🏠 1. Hero Section — The Wow Moment */}
       <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-white to-primary/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 pb-12 sm:pb-16">

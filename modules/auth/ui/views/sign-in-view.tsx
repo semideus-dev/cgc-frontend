@@ -9,14 +9,21 @@ import {
 import { cn } from "@/lib/utils";
 import SignInForm from "@/modules/auth/ui/components/sign-in-form";
 import Link from "next/link";
-import { useAuthProtection } from "@/hooks/use-auth-protection";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SignInView() {
-  const { session, isLoading } = useAuthProtection({ 
-    requireAuth: false,
-    redirectTo: "/dashboard"
-  });
+  const { data: session, isPending: isLoading } = authClient.useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    // If user is already signed in, redirect to home page
+    if (session?.user && !isLoading) {
+      router.push("/");
+    }
+  }, [session, isLoading, router]);
 
   // Show loading state while checking authentication
   if (isLoading) {

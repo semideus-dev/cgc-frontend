@@ -52,7 +52,7 @@ export default function SignUpForm() {
         },
         onSuccess: () => {
           toast.success("Account created successfully!");
-          router.push("/dashboard");
+          router.push("/");
         },
       }
     );

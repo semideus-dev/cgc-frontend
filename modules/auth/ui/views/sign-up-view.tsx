@@ -10,15 +10,22 @@ import {
 import { cn } from "@/lib/utils";
 import SignUpForm from "@/modules/auth/ui/components/sign-up-form";
 import Link from "next/link";
-import { useAuthProtection } from "@/hooks/use-auth-protection";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { heading } from "@/components/providers/font-provider";
 
 export default function SignUpView() {
-  const { session, isLoading } = useAuthProtection({ 
-    requireAuth: false,
-    redirectTo: "/dashboard"
-  });
+  const { data: session, isPending: isLoading } = authClient.useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    
+    if (session?.user && !isLoading) {
+      router.push("/");
+    }
+  }, [session, isLoading, router]);
 
  
   if (isLoading) {

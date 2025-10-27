@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
-import { useUserData } from "@/hooks/use-user-data";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -27,7 +26,6 @@ import {
     Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAuthProtection } from "@/hooks/use-auth-protection";
 
 interface CreditPlan {
     id: string;
@@ -47,19 +45,16 @@ interface UserCredits {
 }
 
 export default function ProfilePage() {
-    const { session, isLoading: isAuthLoading } = useAuthProtection({ requireAuth: true });
-    const { data: userData, isLoading: isUserDataLoading, error } = useUserData();
+    const { data: session, isPending: isLoading } = authClient.useSession();
     const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
-    // Mock credits data - you can create another API endpoint for this
+
     const [userCredits] = useState<UserCredits>({
         current: 25,
         total: 100,
         plan: "Free",
         resetDate: "2024-02-01"
     });
-
-    const isLoading = isAuthLoading || isUserDataLoading;
 
     const creditPlans: CreditPlan[] = [
         {
@@ -144,25 +139,8 @@ export default function ProfilePage() {
         );
     }
 
-    if (error) {
-        return (
-            <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
-                <div className="w-full max-w-md text-center space-y-6">
-                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Error Loading Profile</h1>
-                    <p className="text-sm sm:text-base text-muted-foreground px-4">
-                        There was an error loading your profile data. Please try again.
-                    </p>
-                    <Button onClick={() => window.location.reload()} className="w-full sm:w-auto px-8">
-                        Retry
-                    </Button>
-                </div>
-            </div>
-        );
-    }
-
     const { user } = session;
-    const displayUser = userData || user; // Fallback to session user if userData is not loaded yet
-    const initials = displayUser.name
+    const initials = user.name
         .split(" ")
         .map((n) => n[0])
         .join("")
@@ -180,10 +158,10 @@ export default function ProfilePage() {
                             </AvatarFallback>
                         </Avatar>
                         <div className="space-y-1">
-                            <h1 className="text-xl md:text-3xl font-bold">{displayUser.name}</h1>
+                            <h1 className="text-xl md:text-3xl font-bold">{user.name}</h1>
                             <p className="text-xs md:text-lg text-muted-foreground flex items-center gap-2">
                                 <Mail className="h-4 w-4" />
-                                {displayUser.email}
+                                {user.email}
                             </p>
                         </div>
                     </div>
@@ -239,11 +217,11 @@ export default function ProfilePage() {
                                 <div className="space-y-3 text-sm">
                                     <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                                         <span className="text-muted-foreground font-medium">Full Name:</span>
-                                        <span className="break-words">{displayUser.name}</span>
+                                        <span className="break-words">{user.name}</span>
                                     </div>
                                     <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                                         <span className="text-muted-foreground font-medium">Email:</span>
-                                        <span className="break-all">{displayUser.email}</span>
+                                        <span className="break-all">{user.email}</span>
                                     </div>
                                     <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                                         <span className="text-muted-foreground font-medium">Plan:</span>
@@ -251,7 +229,7 @@ export default function ProfilePage() {
                                     </div>
                                     <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                                         <span className="text-muted-foreground font-medium">Member Since:</span>
-                                        <span>{userData?.stats.memberSince || "Loading..."}</span>
+                                        <span>January 2024</span>
                                     </div>
                                 </div>
                             </div>
@@ -261,15 +239,15 @@ export default function ProfilePage() {
                                 <div className="space-y-3 text-sm">
                                     <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                                         <span className="text-muted-foreground font-medium">Last Login:</span>
-                                        <span>{userData?.stats.lastLogin || "Loading..."}</span>
+                                        <span>Today</span>
                                     </div>
                                     <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                                         <span className="text-muted-foreground font-medium">Total Canvas:</span>
-                                        <span>{userData?.stats.totalCanvases ?? "Loading..."}</span>
+                                        <span>47</span>
                                     </div>
                                     <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                                         <span className="text-muted-foreground font-medium">Projects:</span>
-                                        <span>{userData?.stats.totalProjects ?? "Loading..."}</span>
+                                        <span>12</span>
                                     </div>
                                     <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                                         <span className="text-muted-foreground font-medium">Status:</span>
