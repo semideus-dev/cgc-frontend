@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus, Image, Calendar, ExternalLink } from "lucide-react";
+import { useRouter } from "next/navigation";
 import CanvasDialog from "./canvas-dialog";
 import { useCanvases } from "@/modules/canvas/server/hooks";
 import {
@@ -14,6 +15,8 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 function CanvasCard({ canvas }: { canvas: any }) {
+  const router = useRouter();
+
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString("en-US", {
       month: "short",
@@ -22,17 +25,27 @@ function CanvasCard({ canvas }: { canvas: any }) {
     });
   };
 
+  const handleCanvasClick = () => {
+    router.push(`/canvas/${canvas.id}`);
+  };
+
   return (
-    <Card className="group hover:shadow-lg transition-all duration-300 h-fit flex flex-col">
+    <Card
+      className="group hover:shadow-lg transition-all duration-300 h-fit flex flex-col cursor-pointer"
+      onClick={handleCanvasClick}
+    >
       <CardHeader className="pb-3">
-          <CardTitle className="flex items-center justify-between" title={canvas.name}>
-            <span className="flex text-xl">{canvas.name}</span>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Calendar className="h-3 w-3" />
-              {formatDate(canvas.createdAt)}
-            </div>
-          </CardTitle>
-          {/* {canvas.url && (
+        <CardTitle
+          className="flex items-center justify-between"
+          title={canvas.name}
+        >
+          <span className="flex text-xl">{canvas.name}</span>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <Calendar className="h-3 w-3" />
+            {formatDate(canvas.createdAt)}
+          </div>
+        </CardTitle>
+        {/* {canvas.url && (
             <Button
               variant="ghost"
               size="sm"
@@ -73,21 +86,13 @@ function CanvasCard({ canvas }: { canvas: any }) {
 
 function CanvasCardSkeleton() {
   return (
-    <Card className="h-[250px] flex flex-col">
+    <Card className="h-fit flex flex-col">
       <CardHeader className="pb-3">
         <Skeleton className="h-6 w-3/4" />
       </CardHeader>
       <CardContent className="flex-1 pb-3">
         <Skeleton className="aspect-video w-full rounded-md mb-3" />
-        <Skeleton className="h-4 w-full mb-1" />
-        <Skeleton className="h-4 w-2/3" />
       </CardContent>
-      <CardFooter className="pt-0 pb-4">
-        <div className="flex items-center justify-between w-full">
-          <Skeleton className="h-4 w-20" />
-          <Skeleton className="h-5 w-16" />
-        </div>
-      </CardFooter>
     </Card>
   );
 }
