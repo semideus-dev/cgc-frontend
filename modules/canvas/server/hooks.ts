@@ -80,7 +80,7 @@ function addOptimisticCanvas(
     const optimisticCanvas: Canvas = {
       id: newCanvas.tempId,
       name: newCanvas.name,
-      url: newCanvas.url ?? null,
+      url: newCanvas.url ,
       prompt: newCanvas.prompt,
       userId: newCanvas.userId,
       createdAt: new Date(),
