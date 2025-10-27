@@ -251,7 +251,7 @@ export default function ProfilePage() {
                                     </div>
                                     <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
                                         <span className="text-muted-foreground font-medium">Status:</span>
-                                        <Badge variant="success" className="w-fit">Active</Badge>
+                                        <Badge variant="default" className="w-fit">Active</Badge>
                                     </div>
                                 </div>
                             </div>
