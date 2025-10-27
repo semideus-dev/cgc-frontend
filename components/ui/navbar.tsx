@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-// import UserButton from "@/modules/auth/ui/components/user-button";
+import UserButton from "@/modules/auth/ui/components/user-button";
 
 export default function Navbar() {
   return (
@@ -21,7 +21,7 @@ export default function Navbar() {
         </Link>
 
         <div className="flex items-center gap-4">
-          {/* <UserButton /> */}
+          <UserButton />
         </div>
       </div>
     </nav>

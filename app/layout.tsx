@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { primary } from "@/components/providers/font-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { QueryProvider } from "@/components/providers/query-provider";
 
 export const metadata: Metadata = {
   title: "Spectra",
@@ -17,8 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={primary.className}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          {children}
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <QueryProvider>{children}</QueryProvider>
           <Toaster />
         </ThemeProvider>
       </body>
