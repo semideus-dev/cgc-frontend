@@ -50,7 +50,7 @@ export default function SignInForm() {
         },
         onSuccess: () => {
           toast.success("Signed in successfully!");
-          router.push("/");
+          router.push("/dashboard");
         },
       }
     );
